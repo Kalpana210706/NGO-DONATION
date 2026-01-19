@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+     <script src="https://www.payhere.lk/lib/payhere.js"></script>
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <!-- <script src="https://www.payhere.lk/lib/payhere.js"></script> -->
+
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!-- <script src="https://www.payhere.lk/lib/payhere.js"></script> -->
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+
+function paymentGateway(id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = () => {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var obj = JSON.parse(xhttp.responseText);
+
+            var payment = {
+                "sandbox": true,
+                "merchant_id": "******", // Replace your Merchant ID
+                "return_url": "***********", // Important
+                "cancel_url": "", // Important
+                "notify_url": "http://sample.com/notify",
+                "order_id": obj["order_id"],
+                "items": obj["items"],
+                "amount": obj["amount"],
+                "plan_id": obj["plan_id"],
+                "currency": obj["currency"],
+                "hash": obj["hash"], // *Replace with generated hash retrieved from backend
+                "first_name": obj["first_name"],
+                "last_name": obj["last_name"],
+                "email": obj["email"],
+                "phone": obj["phone"],
+                "address": obj["address"],
+                "city": obj["city"],
+                "country": "Sri Lanka",
+                "delivery_address": "",
+                "delivery_city": "",
+                "delivery_country": "Sri Lanka",
+                "custom_1": "",
+                "custom_2": "",
+            };
+
+            // Payment completed. It can be a successful failure.
+            payhere.onCompleted = function onCompleted(orderId) {
+                console.log("Payment completed. OrderID:" + orderId);
+                var paymentQueryString = Object.keys(payment).map(key => key + '=' + encodeURIComponent(payment[key])).join('&');
+
+                window.location.href = "http://localhost/*******;
+
+                // Note: validate the payment and show success or failure page to the customer
+            };
+
+            // Payment window closed
+            payhere.onDismissed = function onDismissed() {
+                // Note: Prompt user to pay again or show an error page
+                console.log("Payment dismissed");
+            };
+
+            // Error occurred
+            payhere.onError = function onError(error) {
+                // Note: show an error page
+                console.log("Error:" + error);
+            };
+
+            payhere.startPayment(payment);
+        }
+    }
+    xhttp.open("GET", "Your....URL?id=" + id, true);
+    xhttp.send();
+}
