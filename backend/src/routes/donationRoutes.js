@@ -22,7 +22,7 @@ const {
 
 router.post("/", authMiddleware, createDonation);
 router.get("/my", authMiddleware, getMyDonations);
-// simulate payment result
+
 router.patch("/:id/success", authMiddleware, markDonationSuccess);
 router.patch("/:id/failed", authMiddleware, markDonationFailed);
 
